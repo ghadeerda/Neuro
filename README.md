@@ -22,22 +22,22 @@ the file includes copying files:
 2- build the nginx image with:
 
 `docker-compose build`
-
+docke
 3-run the containers with:
 
 `docker-compose up -d`
 
 4-test on the url:
 
-[Nginx](nginx-dev.eastus.cloudapp.azure.com):9000
+`nginx-dev.eastus.cloudapp.azure.com:9000`
 
 5-download scripts from
 
-[Nginx](nginx-dev.eastus.cloudapp.azure.com):9000/script.py  #or script.sh
+`nginx-dev.eastus.cloudapp.azure.com:9000/script.py  #or script.sh`
 
 6-you can test the script by going into nginx container and run the script
 
-`docker-compose exec nginx bash`
+`docker-compose exec -it nginx-container bash`
 
 `cd /usr/share/nginx/html`
 
