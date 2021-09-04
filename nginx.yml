@@ -1,0 +1,89 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ing
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+spec:
+  # tls:
+  # - hosts:
+  #   - nginx-dev.eastus.cloudapp.azure.com
+  #   secretName: mysec-tls
+  rules:
+  - host: nginx-dev.eastus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-svc
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  labels:
+    app: nginx
+spec:
+  ports:
+    - name: nginx-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: nginx
+  sessionAffinity: None
+  type: ClusterIP
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: primary
+  name: nginx-deploy
+  labels:
+    app: nginx
+  creationTimestamp: null
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  revisionHistoryLimit: 1 
+  selector:
+    matchLabels:
+      name: nginx-temp
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: nginx-temp
+        app: nginx       
+    spec:
+      containers:
+        - name: nginx-ct
+          image: my-nginx
+          resources:
+              requests:
+                memory: "200Mi"
+                cpu: "0.5"
+              limits:
+                memory: "1000Mi"
+                cpu: "1"
+          ports:
+            - containerPort: 80
+          livenessProbe: 
+            path: /healthz
+            port: 80
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome 
+            initialDelaySeconds: 100
+            periodSeconds: 30
+      restartPolicy: Always
+      nodeSelector:
+        nginx: 'yes'
+

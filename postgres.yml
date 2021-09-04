@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-svc
+  labels:
+    app: postgres
+spec:
+  ports:
+    - name: postgres-port
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
+  sessionAffinity: None
+  type: ClusterIP
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: primary
+  name: postgres-deploy
+  labels:
+    app: postgres
+  creationTimestamp: null
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  revisionHistoryLimit: 1 
+  selector:
+    matchLabels:
+      name: postgres-temp
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: postgres-temp
+        app: postgres       
+    spec:
+      containers:
+        - name: postgres-ct
+          image: postgres
+          resources:
+              requests:
+                memory: "200Mi"
+                cpu: "0.5"
+              limits:
+                memory: "1000Mi"
+                cpu: "1"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data
+      restartPolicy: Always
+      nodeSelector:
+        postgres: 'yes'          
+      volumes:
+      - name: data
+        hostPath:
+          path:  /usr/data/postgres
+
