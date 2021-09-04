@@ -33,7 +33,8 @@ docke
 
 5-download scripts from
 
-`nginx-dev.eastus.cloudapp.azure.com:9000/script.py  #or script.sh`
+`nginx-dev.eastus.cloudapp.azure.com:9000/script.py`
+`nginx-dev.eastus.cloudapp.azure.com:9000/script.sh`
 
 6-you can test the script by going into nginx container and run the script
 
