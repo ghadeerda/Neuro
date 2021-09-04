@@ -22,7 +22,7 @@ the file includes copying files:
 2- build the nginx image with:
 
 `docker-compose build`
-docke
+
 3-run the containers with:
 
 `docker-compose up -d`
