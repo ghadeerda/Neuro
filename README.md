@@ -6,7 +6,7 @@ the file includes copying files:
 
 * nginx.conf: configure the nginx
 * script.py: a python script to create a table in postgres database
-* script.sh: a bash script to do the same
+* run.sh: to run the python script
 
 2-creat the nginx container using the docker-compose, and set to listen on port 9000
 
@@ -33,16 +33,11 @@ the file includes copying files:
 
 5-download scripts from
 
-`nginx-dev.eastus.cloudapp.azure.com:9000/script.py`
-`nginx-dev.eastus.cloudapp.azure.com:9000/script.sh`
+`nginx-dev.eastus.cloudapp.azure.com:9000/create_table.py`
 
-6-you can test the script by going into nginx container and run the script
+6-you can test the script on:
 
-`docker-compose exec -it nginx-container bash`
-
-`cd /usr/share/nginx/html`
-
-`./script.sh -d slowplanet -u root -h db `
+`nginx-dev.eastus.cloudapp.azure.com:9000/script`
 
 7-cleanup
 
