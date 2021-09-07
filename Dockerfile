@@ -7,7 +7,7 @@ COPY create_table.py /usr/share/nginx/html
 
 COPY run.sh /usr/share/nginx/html
 
-RUN chown nginx: -R /usr/share/nginx/
+#RUN chown nginx: -R /usr/share/nginx/
 RUN chmod +x /usr/share/nginx/html/run.sh
 
 COPY nginx.conf /etc/nginx/
